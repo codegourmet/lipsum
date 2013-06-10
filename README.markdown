@@ -1,37 +1,33 @@
-# Lipsum - A Lorem Ipsum Generator Plugin for Rails
+# Lipsum - A Lorem Ipsum Generator for Rails
 
 When developing a new application, there's often a need to output sample
 paragraphs or sentences of text. Lorem Ipsum has been the traditional
-placeholder and now it's easy to use from within any Rails controller or view.
-
-## Install the Plugin
-
-    ./script/plugin install git://github.com/h3h/lipsum.git
+placeholder and now it's easy to use without relying on webservices.
 
 ## Usage
 
-In a controller or view, call the `lipsum` method, passing either a number of
-words or an options hash.
+    Lipsum.paragraphs(3)
+    Lipsum.sentences(3)
+    Lipsum.words(3)
 
-    One paragraph:
-    <%= lipsum %>
+    # Wrap each paragraph in <p></p>:
+    Lipsum.paragraphs(3, format: html)
 
-    Fifty words:
-    <%= lipsum(50) %>
-
-    Fancier options:
-    <%= lipsum(:paragraphs => 3) %>
-    <%= lipsum(:sentences => 5) %>
-    <%= lipsum(:words => 324) %>
+## TODO
+  tests
 
 ## Credits
 
-Based on the Lorem Ipsum text from [lipsum.com][ls].
+Based on the Lorem Ipsum text from [Brad Fults][h3h].
+Based on the Lorem Ipsum rails plugin from [lipsum.com][ls].
 
+ [h3h]: http://h3h.net/
  [ls]: http://www.lipsum.com/
 
 ## Author
 
 Created by [Brad Fults][h3h].
+Gemified + removed view helper by [Markus Seeger][codegourmet].
 
  [h3h]: http://h3h.net/
+ [codegourmet]: https://github.com/codegourmet/

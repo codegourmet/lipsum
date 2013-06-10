@@ -1,3 +1,5 @@
+require 'version'
+
 module Lipsum
   LOREM_IPSUM = <<-LIPSUM
   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida mi vitae orci commodo laoreet. Pellentesque vestibulum, mi vitae porta accumsan, purus nisi tempus sem, vitae pretium ipsum risus et justo. Aliquam suscipit enim vel orci rutrum iaculis. In hac habitasse platea dictumst. Pellentesque dapibus, purus id vestibulum tempus, lacus augue fermentum nibh, vel eleifend sapien magna sit amet mi. Maecenas nunc nisl, porttitor nec tempus at, dictum gravida risus. Duis ut eros mauris. Vestibulum at nunc in ligula elementum ultrices. Vestibulum malesuada dapibus lorem, in euismod mi dictum vitae. Phasellus luctus justo quis urna viverra vel elementum velit consequat.
@@ -21,29 +23,25 @@ module Lipsum
   Quisque sed suscipit lectus. Pellentesque eleifend, neque eget iaculis dapibus, purus diam rutrum nibh, at euismod enim nunc a libero. Donec felis mi, semper ac aliquet eget, eleifend vel velit. Cras sagittis sollicitudin pharetra. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse potenti. Donec metus nisi, accumsan eu porttitor quis, mattis ut ligula. Fusce sapien erat, imperdiet et adipiscing ac, sodales non leo. Nam ut purus ut odio pretium congue. Donec at cursus mi. Morbi mattis ullamcorper lacus, id rhoncus lacus pretium ut. Proin sollicitudin augue vitae nisl scelerisque in interdum leo condimentum. Aliquam erat massa, congue eu congue ut, sagittis vitae ante. Nam vel velit eget massa ornare lacinia. Ut in justo metus.
   LIPSUM
 
-  def self.paragraphs(count=1)
-    LOREM_IPSUM.split(/\n\n/)[0,count].join("\n\n")
+  def self.wrap_text(text)
+    "<p>#{text}</p>"
   end
 
-  def self.sentences(count=5)
-    LOREM_IPSUM.split(/\.\s+/)[0,count].join(". ")
+  def self.paragraphs(count=1, options={})
+    raise "only supports up to 9 paragraphs" if count > 9
+    result = LOREM_IPSUM.split(/\n\n/)[0,count]
+    result.map!{|p| wrap_text(p)} if options[:format] == :html
+    result.join("\n\n")
   end
 
-  def self.words(count=50)
-    LOREM_IPSUM.split(/\s+/)[0,count].join(" ")
+  def self.sentences(count=5, options={})
+    result = LOREM_IPSUM.split(/\.\s+/)[0,count].join(". ")
+    options[:format] == :html ? wrap_text(result) : result
   end
 
-  module Methods
-    def lipsum(arg=nil)
-      case arg
-      when nil
-        return Lipsum.paragraphs(1)
-      when Numeric
-        return Lipsum.words(arg)
-      when Hash
-        raise "Only one type at a time." if arg.size > 1
-        return Lipsum.send(arg.keys.first, arg.values.first)
-      end
-    end
+  def self.words(count=50, options={})
+    result = LOREM_IPSUM.split(/\s+/)[0,count].join(" ")
+    options[:format] == :html ? wrap_text(result) : result
   end
+
 end
